@@ -1,4 +1,4 @@
-const base_url = 'https://l5xwzx0n-5000.inc1.devtunnels.ms';
+const base_url = 'https://m3w1crxz-5000.inc1.devtunnels.ms';
 
 document.getElementById('encrypt').addEventListener('click', async () => {
     let plain_text = document.getElementById('plain_text').value;
@@ -29,6 +29,26 @@ document.getElementById('encrypt').addEventListener('click', async () => {
     else if (cipher === 'playfair') {
         try {
             const response = await fetch(`${base_url}/playfair-encrypt`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: plain_text, key: key })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('output').innerText = data.encrypted_text || "Encryption successful!";
+            } else {
+                document.getElementById('output').innerText = "Error in encryption!";
+            }
+        } catch (error) {
+            document.getElementById('output').innerText = "Failed to connect to the server.";
+        }
+    }
+    else if (cipher === 'caesar') {
+        try {
+            const response = await fetch(`${base_url}/caesar-encrypt`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -79,6 +99,26 @@ document.getElementById('decrypt').addEventListener('click', async () => {
     else if (cipher === 'playfair') {
         try {
             const response = await fetch(`${base_url}/playfair-decrypt`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: plain_text, key: key })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('output').innerText = data.decrypted_text || "Decryption successful!";
+            } else {
+                document.getElementById('output').innerText = "Error in decryption!";
+            }
+        } catch (error) {
+            document.getElementById('output').innerText = "Failed to connect to the server.";
+        }
+    }
+    else if (cipher === 'caesar') {
+        try {
+            const response = await fetch(`${base_url}/caesar-decrypt`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
